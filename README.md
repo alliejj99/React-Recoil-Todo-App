@@ -1,5 +1,6 @@
 ### React Recoil Todo App
   리액트의 Recoil이란 상태관리를 사용하여 Todo App을 만들었습니다.
+  ![Demo](https://user-images.githubusercontent.com/118407356/226374226-e603e249-591b-4686-8b89-4cd176cbb4b5.gif)
 
 - **TodoItemCreator()**  
   새로운 todo 아이템을 생성하기 위해 우리는 todoListState 내용을 업데이트하는 setter함수에 접근해야 합니다. todoItemCreator 컴포넌트의 setter 함수를 얻기 위해 useSetRecoilState()훅을 사용할 수 있습니다.  
@@ -308,7 +309,7 @@
     
 
   
-- **비동기 데이터 쿼리**
+- **비동기 데이터 쿼리**  
   만약 user의 이름이 쿼리 데이터 베이스에 저장되어 있다면 Promise를 리턴하거나 async 함수를 사용하기만 하면 됩니다. 의존성에 하나라도 변경점이 생긴다면 selector는 새로운 쿼리를 재검사하고 다시 실행합니다. 그리고 그 결과는 쿼리가 유니크한 인풋이 있을 때에만 실행 되도록 캐시(저장)됩니다.  
   ```jsx
   // userAtoms.js
@@ -330,7 +331,7 @@
   });
   ```
 
-  - React Suspense와 함께 사용
+  - React Suspense와 함께 사용  
     리액트 렌더 함수는 동기인데 promise가 resolve되기 전에 무엇을 렌더 할 수 있을까요? recoil은 보류중인 데이터를 다루기 위해 React Suspense와 함께 동작하도록 디자인되어 있습니다. 컴포넌트를 React Suspense로 감싸서 아직 보류중인 하위 항목들을 잡아내고 대체하기 위한 UI를 렌더링 할 수 있습니다.
     ```jsx
       import { Suspense } from "react";
