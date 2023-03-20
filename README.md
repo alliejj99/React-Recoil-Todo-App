@@ -1,7 +1,7 @@
 ### React Recoil Todo App
   리액트의 Recoil이란 상태관리를 사용하여 Todo App을 만들었습니다.
 
-- TodoItemCreator()  
+- **TodoItemCreator()**  
   새로운 todo 아이템을 생성하기 위해 우리는 todoListState 내용을 업데이트하는 setter함수에 접근해야 합니다. todoItemCreator 컴포넌트의 setter 함수를 얻기 위해 useSetRecoilState()훅을 사용할 수 있습니다.  
   | Hooks                 | Desc                                                                                                         |
   |-----------------------|--------------------------------------------------------------------------------------------------------------|
@@ -9,9 +9,10 @@
   | useRecoilValue()      | 전역 상태의 state 상태 값만을 참조하기 위해 사용됩니다.<br>선언된 변수에 할당하여 사용하면 됩니다.           |
   | useSetRecoilState()      | 전역 상태의 setter 함수만을 활용하기 위해 사용됩니다.<br>선언된 함수 변수에 할당하여 사용하면 됩니다.        |
   | useResetRecoilState() | 전역 상태를 defaulit(초기값)으로 Reset 하기 위해 사용됩니다.<br>선언된 함수 변수에 할당하여 사용하면 됩니다. |
-  
-- atom 설정하기
+    
+- **atom 설정하기**
   ```jsx
+  // todoAtom.js
   import { atom, selector } from "recoil";
 
   export const todoListState = atom({
@@ -48,9 +49,10 @@
     },
   });
   ```
-
-- 일정 추가하기  
+  
+- **일정 추가하기**  
   ```jsx
+  // TodoItemCreator.js
   import React, { useCallback, useState } from "react";
   import { useSetRecoilState } from "recoil";
   import { todoListState } from "../todoAtom";
@@ -96,8 +98,10 @@
 
   export default TodoItemCreator;
   ```
-- 일정 수정하기  
+  
+- **일정 수정하기**  
   ```jsx
+  // TodoItemCreator.js
   import React, { useCallback } from "react";
   import { useRecoilState } from "recoil";
   import { todoListState } from "../todoAtom";
@@ -144,8 +148,10 @@
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
   }
   ```
-- 일정 완료 Toggle
+  
+- **일정 완료 Toggle**
   ```jsx
+  // TodoItemCreator.js
   import React, { useCallback } from "react";
   import { useRecoilState } from "recoil";
   import { todoListState } from "../todoAtom";
@@ -185,8 +191,10 @@
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
   }
   ```
-- 일정 삭제하기  
+  
+- **일정 삭제하기**  
   ```jsx
+  // TodoItemCreator.js
   import React, { useCallback } from "react";
   import { useRecoilState } from "recoil";
   import { todoListState } from "../todoAtom";
@@ -215,10 +223,10 @@
   }
 
   ```
-- 완료된 일정 / 완료하지 못한 일정 / 전체 일정 필터링 하기  
+  
+- **완료된 일정 / 완료하지 못한 일정 / 전체 일정 필터링 하기**  
   ```jsx
   // TodoListFilters.js
-
   import React, { useCallback } from "react";
   import { useRecoilState } from "recoil";
   import { todoListFilterState } from "../todoAtom";
