@@ -48,6 +48,25 @@
       }
     },
   });
+
+  export const todoListStatsState = selector({
+    key: "todoListStatsState",
+    get: ({ get }) => {
+      const todoList = get(todoListState);
+      const totalNum = todoList.length;
+      const totalCompletedNum = todoList.filter((item) => item.isComplete).length;
+      const totalUncompletedNum = totalNum - totalCompletedNum; // 전체 갯수 - 완료 갯수 = 미완료 갯수
+      const percentCompleted = totalNum === 0 ? 0 : totalCompletedNum / totalNum; // 총 갯수가 0이면 0%, 아니면 완료 갯수 / 총 갯수... *100은 사용하는 컴포넌트에서 계산
+
+      return {
+        todoList,
+        totalNum,
+        totalCompletedNum,
+        totalUncompletedNum,
+        percentCompleted,
+      };
+    },
+  });
   ```
   
 - **일정 추가하기**  
@@ -257,3 +276,32 @@
 
   ```
   
+- **통계 기능 추가하기**
+  ```jsx
+  // TodoListStats.js
+  import React from "react";
+  import { useRecoilValue } from "recoil";
+  import { todoListStatsState } from "../todoAtom";
+
+  const TodoListStats = () => {
+    const { 
+      totalNum, 
+      totalCompletedNum, 
+      totalUncompletedNum, 
+      percentCompleted
+     } = useRecoilValue(todoListStatsState);
+
+    const formattedPercentCompleted = Math.round(percentCompleted * 100); // 반올림
+    return (
+      <ul>
+        <li>총 일정 갯수: {totalNum}</li>
+        <li>완료된 일정 갯수: {totalCompletedNum}</li>
+        <li>미완료된 일정 갯수: {totalUncompletedNum}</li>
+        <li>진행도: {formattedPercentCompleted}%</li>
+      </ul>
+    );
+  };
+
+  export default TodoListStats;
+  ```
+
