@@ -33,3 +33,22 @@ export const filteredTodoListState = selector({
     }
   },
 });
+
+export const todoListStatsState = selector({
+  key: "todoListStatsState",
+  get: ({ get }) => {
+    const todoList = get(todoListState);
+    const totalNum = todoList.length;
+    const totalCompletedNum = todoList.filter((item) => item.isComplete).length;
+    const totalUncompletedNum = totalNum - totalCompletedNum; // 전체 갯수 - 완료 갯수 = 미완료 갯수
+    const percentCompleted = totalNum === 0 ? 0 : totalCompletedNum / totalNum; // 총 갯수가 0이면 0%, 아니면 완료 갯수 / 총 갯수... *100은 사용하는 컴포넌트에서 계산
+
+    return {
+      todoList,
+      totalNum,
+      totalCompletedNum,
+      totalUncompletedNum,
+      percentCompleted,
+    };
+  },
+});

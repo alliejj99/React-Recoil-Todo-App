@@ -3,6 +3,7 @@ import "./App.css";
 import TodoItem from "./components/TodoItem";
 import TodoItemCreator from "./components/TodoItemCreator";
 import TodoListFilters from "./components/TodoListFilters";
+import TodoListStats from "./components/TodoListStats";
 import { filteredTodoListState, todoListState } from "./todoAtom";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <div className="App">
+      <TodoListStats />
       <TodoListFilters />
       <TodoItemCreator />
       {todoList.map((todoItem) => (
