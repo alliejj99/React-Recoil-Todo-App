@@ -1,23 +1,28 @@
+import { Suspense } from "react";
 import { useRecoilValue } from "recoil";
-import "./App.css";
+import { filteredTodoListState, todoListState } from "./todoAtom";
+import { currentUserNameQuery } from "./userAtoms";
 import TodoItem from "./components/TodoItem";
 import TodoItemCreator from "./components/TodoItemCreator";
 import TodoListFilters from "./components/TodoListFilters";
 import TodoListStats from "./components/TodoListStats";
-import { filteredTodoListState, todoListState } from "./todoAtom";
+import "./App.css";
 
 function App() {
-  const todoList = useRecoilValue(todoListState);
+  // const todoList = useRecoilValue(todoListState);
   const filteredTodoList = useRecoilValue(filteredTodoListState);
-  console.log("todoList:", todoList);
-  console.log("filteredTodoList:", filteredTodoList);
+  // console.log("todoList:", todoList);
+  // console.log("filteredTodoList:", filteredTodoList);
 
   return (
     <div className="App">
+      <Suspense fallback={<div>Loading...</div>}>
+        <CurrentUserInfo />
+      </Suspense>
       <TodoListStats />
       <TodoListFilters />
       <TodoItemCreator />
-      {todoList.map((todoItem) => (
+      {filteredTodoList.map((todoItem) => (
         <TodoItem key={todoItem.id} item={todoItem} />
       ))}
     </div>
@@ -25,3 +30,8 @@ function App() {
 }
 
 export default App;
+
+function CurrentUserInfo() {
+  const userName = useRecoilValue(currentUserNameQuery);
+  return <div>{userName}</div>;
+}

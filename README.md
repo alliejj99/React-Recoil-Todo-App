@@ -9,7 +9,8 @@
   | useRecoilValue()      | 전역 상태의 state 상태 값만을 참조하기 위해 사용됩니다.<br>선언된 변수에 할당하여 사용하면 됩니다.           |
   | useSetRecoilState()      | 전역 상태의 setter 함수만을 활용하기 위해 사용됩니다.<br>선언된 함수 변수에 할당하여 사용하면 됩니다.        |
   | useResetRecoilState() | 전역 상태를 defaulit(초기값)으로 Reset 하기 위해 사용됩니다.<br>선언된 함수 변수에 할당하여 사용하면 됩니다. |
-    
+    ---
+
 - **atom 설정하기**
   ```jsx
   // todoAtom.js
@@ -69,7 +70,7 @@
   });
   ```
   
-- **일정 추가하기**  
+- **일정 추가 기능**  
   ```jsx
   // TodoItemCreator.js
   import React, { useCallback, useState } from "react";
@@ -118,7 +119,7 @@
   export default TodoItemCreator;
   ```
   
-- **일정 수정하기**  
+- **일정 수정 기능**  
   ```jsx
   // TodoItemCreator.js
   import React, { useCallback } from "react";
@@ -168,7 +169,7 @@
   }
   ```
   
-- **일정 완료 Toggle**
+- **일정 완료 Toggle 기능**
   ```jsx
   // TodoItemCreator.js
   import React, { useCallback } from "react";
@@ -211,7 +212,7 @@
   }
   ```
   
-- **일정 삭제하기**  
+- **일정 삭제 기능**  
   ```jsx
   // TodoItemCreator.js
   import React, { useCallback } from "react";
@@ -243,7 +244,7 @@
 
   ```
   
-- **완료된 일정 / 완료하지 못한 일정 / 전체 일정 필터링 하기**  
+- **완료된 일정 / 완료하지 못한 일정 / 전체 일정 필터링 기능**  
   ```jsx
   // TodoListFilters.js
   import React, { useCallback } from "react";
@@ -303,5 +304,67 @@
   };
 
   export default TodoListStats;
+  ```  
+    
+
+  
+- **비동기 데이터 쿼리**
+  만약 user의 이름이 쿼리 데이터 베이스에 저장되어 있다면 Promise를 리턴하거나 async 함수를 사용하기만 하면 됩니다. 의존성에 하나라도 변경점이 생긴다면 selector는 새로운 쿼리를 재검사하고 다시 실행합니다. 그리고 그 결과는 쿼리가 유니크한 인풋이 있을 때에만 실행 되도록 캐시(저장)됩니다.  
+  ```jsx
+  // userAtoms.js
+  /* 비동기 데이터 요청 보내기 */
+  import { atom, selector } from "recoil";
+
+  export const currentUserIdState = atom({
+    key: "currentUserIdState",
+    default: 1,
+  });
+
+  export const currentUserNameQuery = selector({
+    key: "currentUserNameQuery",
+    get: async ({ get }) => {
+      const path = "https://jsonplaceholder.typicode.com/users/";
+      const response = await axios.get(`${path}${get(currentUserIdState)}`);
+      return response.data.name;
+    },
+  });
   ```
 
+  - React Suspense와 함께 사용
+    리액트 렌더 함수는 동기인데 promise가 resolve되기 전에 무엇을 렌더 할 수 있을까요? recoil은 보류중인 데이터를 다루기 위해 React Suspense와 함께 동작하도록 디자인되어 있습니다. 컴포넌트를 React Suspense로 감싸서 아직 보류중인 하위 항목들을 잡아내고 대체하기 위한 UI를 렌더링 할 수 있습니다.
+    ```jsx
+      import { Suspense } from "react";
+      import { useRecoilValue } from "recoil";
+      import { filteredTodoListState } from "./todoAtom";
+      import { currentUserNameQuery } from "./userAtoms";
+
+      function App() {
+        const filteredTodoList = useRecoilValue(filteredTodoListState);
+        return (
+          <div className="App">
+            <Suspense fallback={<div>Loading...</div>}>
+              <CurrentUserInfo />
+            </Suspense>
+          </div>
+        );
+      }
+
+      export default App;
+
+      function CurrentUserInfo() {
+        const userName = useRecoilValue(currentUserNameQuery);
+        return <div>{userName}</div>;
+      }
+    ```
+
+---
+#### npm installs
+  ```bash
+  $ npm install recoil --save
+  ```
+  ```bash
+  $ npm install axios --save
+  ```
+---
+#### 비동기 데이터 요청을 보낼 사이트
+[오픈 데이터]https://jsonplaceholder.typicode.com/users
